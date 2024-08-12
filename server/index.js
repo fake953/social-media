@@ -6,6 +6,7 @@ import "dotenv/config";
 import helmet from "helmet";
 
 import postsRouter from "./routes/post.js";
+import authRouter from "./routes/auth.js";
 import morgan from "morgan";
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(morgan("tiny"));
 
 app.use("/posts", postsRouter);
+app.use("/auth", authRouter);
 const port = process.env.PORT || 5000;
 
 mongoose
