@@ -1,4 +1,4 @@
-import { useGetAllPostsQuery } from "../services/posts";
+import { useGetAllPostsQuery } from "../services/apiQuery";
 const Post = () => {
   const { data, error, isLoading } = useGetAllPostsQuery();
   console.log(data);
