@@ -24,7 +24,13 @@ const userSchema = new mongoose.Schema({
   },
   picturePath: {
     type: String,
+    required: true,
   },
+  friends: [String],
+  location: String,
+  occupation: String,
+  viewedProfile: Number,
+  impressions: Number,
 });
 
 userSchema.plugin(timestampsPlugin);
