@@ -22,6 +22,7 @@ console.log(__dirname);
 const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(express.query());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use(helmet());
 app.use(cors());

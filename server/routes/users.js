@@ -8,7 +8,7 @@ import {
 import { verifiedToken } from "../middleware/auth.js";
 
 router.get("/:id", verifiedToken, getUser);
-router.get("/:id", verifiedToken, getUserFriends);
-router.patch("/:id/:friendId", verifiedToken, addRemoveFriend);
+router.get("/:id/friends", getUserFriends);
+router.patch("/:id/:friendId", addRemoveFriend);
 
 export default router;

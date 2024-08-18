@@ -5,7 +5,7 @@ export const verifiedToken = async (req, res, next) => {
     let token = req.header("Authorization");
 
     if (!token) {
-      res.status(403).json({
+      return res.status(403).json({
         data: null,
         message: "Access Denied! ",
       });

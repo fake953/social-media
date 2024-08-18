@@ -24,9 +24,12 @@ const userSchema = new mongoose.Schema({
   },
   picturePath: {
     type: String,
-    required: true,
+    // required: true,
   },
-  friends: [String],
+  friends: {
+    type: Array,
+    default: [],
+  },
   location: String,
   occupation: String,
   viewedProfile: Number,

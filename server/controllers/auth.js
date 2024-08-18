@@ -3,7 +3,17 @@ import jwt from "jsonwebtoken";
 import User from "../model/user.js";
 
 export const registerUser = async (req, res) => {
-  const { first_name, last_name, email, password } = req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    password,
+    // friends,
+    // location,
+    // occupation,
+    // viewedProfile,
+    // impressions,
+  } = req.body;
 
   const isUserExist = await User.findOne({ email });
   if (isUserExist) {
@@ -20,6 +30,11 @@ export const registerUser = async (req, res) => {
       last_name,
       email,
       password: hashedPassword,
+      friends,
+      location: "Earth",
+      occupation: "FullStack Developer",
+      viewedProfile: Math.floor(Math.random() * 10000),
+      impressions: Math.floor(Math.random() * 10000),
     });
     const savedUser = await newUser.save();
     res.status(201).json({
