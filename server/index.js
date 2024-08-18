@@ -13,6 +13,8 @@ import postsRouter from "./routes/post.js";
 import authRouter from "./routes/auth.js";
 import userRouter from "./routes/users.js";
 import { registerUser } from "./controllers/auth.js";
+import { createPost } from "./controllers/post.js";
+import { verifiedToken } from "./middleware/auth.js";
 
 //PROJECT CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
@@ -40,6 +42,7 @@ const upload = multer({ storage });
 
 //ROUES BY FILES
 app.use("/auth/register", upload.single("picture"), registerUser);
+app.use("/posts", verifiedToken, upload.single("picture"), createPost);
 //ROUTES
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);

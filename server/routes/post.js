@@ -2,15 +2,15 @@ import express from "express";
 const router = express.Router();
 
 import {
-  getAllPosts,
   createPost,
-  deletePost,
   chosenPost,
+  likePost,
+  getUserPosts,
 } from "../controllers/post.js";
+import { verifiedToken } from "../middleware/auth.js";
 
-router.get("/", getAllPosts);
-router.post("/", createPost);
-// router.put('/:id',updatePost)
-router.delete("/:id", deletePost);
+router.post("/", verifiedToken, createPost);
 router.get("/:id", chosenPost);
+router.get("/:userId/posts", getUserPosts);
+router.patch("/:id/like", verifiedToken, likePost);
 export default router;
