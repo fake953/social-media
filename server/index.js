@@ -15,11 +15,13 @@ import userRouter from "./routes/users.js";
 import { registerUser } from "./controllers/auth.js";
 import { createPost } from "./controllers/post.js";
 import { verifiedToken } from "./middleware/auth.js";
+import User from "./model/user.js";
+import Post from "./model/post.js";
+import { posts, users } from "./data/index.js";
 
 //PROJECT CONFIGURATION
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-console.log(__dirname);
 
 const app = express();
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -42,7 +44,7 @@ const upload = multer({ storage });
 
 //ROUES BY FILES
 app.use("/auth/register", upload.single("picture"), registerUser);
-app.use("/posts", verifiedToken, upload.single("picture"), createPost);
+app.post("/posts", verifiedToken, upload.single("picture"), createPost);
 //ROUTES
 app.use("/posts", postsRouter);
 app.use("/auth", authRouter);
@@ -52,7 +54,8 @@ const port = process.env.PORT || 5000;
 mongoose
   .connect(process.env.MONGO_ENV)
   .then(() => {
-    console.log("connected to the data base");
     app.listen(port, () => console.log(`listening on port :${port}`));
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((err) => console.log(`cannot connect to the mongodb : ${err}`));
