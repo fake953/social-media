@@ -6,7 +6,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useRegisterUserMutation } from "../../services/apiQuery";
+import { useRegisterUserMutation } from "../../services/api/apiQuery";
 const schema = z.object({
   first_name: z.string().min(4),
   last_name: z.string().min(2),

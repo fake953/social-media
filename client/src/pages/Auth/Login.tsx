@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 import { Button, Card, Input, Typography } from "@material-tailwind/react";
 import { useState } from "react";
 
-import { useLoginUsrMutation } from "../../services/apiQuery";
+import { useLoginUsrMutation } from "../../services/api/apiQuery";
 
 type formFields = {
   email: string;
