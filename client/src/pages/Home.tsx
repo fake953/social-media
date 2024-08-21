@@ -1,9 +1,10 @@
-import React from "react";
 import { Button } from "@material-tailwind/react";
+import HomeNav from "../components/home/HomeNav";
 
 const Home = () => {
   return (
     <div>
+      <HomeNav />
       <Button>click me</Button>
     </div>
   );

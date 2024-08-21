@@ -1,4 +1,4 @@
-import { Card, Input, Button, Typography } from "@material-tailwind/react";
+import { Card, Input, Button } from "@material-tailwind/react";
 
 import { NavLink } from "react-router-dom";
 
@@ -30,9 +30,9 @@ const Register = () => {
 
   const onSubmit: SubmitHandler<formFields> = async (data) => {
     try {
-      reset();
       const res = await registerUser(data);
       console.log(res);
+      reset();
     } catch (error) {
       console.log(error);
 
@@ -44,30 +44,26 @@ const Register = () => {
 
   return (
     <div className=" min-h-screen h-full flex justify-center items-center ">
-      <Card color="transparent" className="py-6 px-8">
-        <Typography variant="h5" color="blue-gray">
+      <Card color="gray" className="py-6 px-8	">
+        <h2 className=" text-cyan-300 text-2xl font-medium">
           Welcome to Minimedia !{" "}
-        </Typography>
+        </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
         >
           <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              First Name
-            </Typography>
+            <h2 className="-mb-3">First Name</h2>
             <Input
               {...register("first_name")}
               size="lg"
               placeholder="John"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+              // className="  focus:!border-t-gray-900"
               labelProps={{
                 className: "before:content-none after:content-none",
               }}
             />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Last Name
-            </Typography>
+            <h2 className="-mb-3 ">Last Name</h2>
             <Input
               {...register("last_name")}
               size="lg"
@@ -77,9 +73,7 @@ const Register = () => {
                 className: "before:content-none after:content-none",
               }}
             />
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Email
-            </Typography>
+            <h2 className="-mb-3">Email</h2>
 
             <Input
               {...register("email")}
@@ -91,13 +85,9 @@ const Register = () => {
               }}
             />
             {errors.email && (
-              <Typography className="text-red-400" variant="h6">
-                {errors.email.message}
-              </Typography>
+              <h2 className="text-red-400">{errors.email.message}</h2>
             )}
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
-            </Typography>
+            <h2 className="-mb-3">Password</h2>
             <Input
               {...register("password")}
               size="lg"
@@ -108,31 +98,25 @@ const Register = () => {
               }}
             />
             {errors.password && (
-              <Typography className="text-red-400" variant="h6">
-                {errors.password.message}
-              </Typography>
+              <h2 className="text-red-400">{errors.password.message}</h2>
             )}
           </div>
           <Button
             disabled={isSubmitting}
             type="submit"
-            className="mt-6"
+            className="mt-6 bg-cyan-300"
             fullWidth
           >
             {isSubmitting ? "loading ..." : "sign up"}
           </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
+          <h2 color="gray" className="mt-4  text-center font-normal">
             Already have an account?{" "}
-            <NavLink to={"/auth/login"} className="font-medium text-gray-900">
+            <NavLink to={"/auth/login"} className="font-medium text-cyan-300">
               login
             </NavLink>
-          </Typography>
+          </h2>
         </form>
-        {errors.root && (
-          <Typography className="text-red-400" variant="h6">
-            {errors.root.message}
-          </Typography>
-        )}
+        {errors.root && <h2 className="text-red-400">{errors.root.message}</h2>}
       </Card>
     </div>
   );

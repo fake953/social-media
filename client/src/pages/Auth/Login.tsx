@@ -1,6 +1,6 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import { NavLink } from "react-router-dom";
-import { Button, Card, Input, Typography } from "@material-tailwind/react";
+import { Button, Card, Input } from "@material-tailwind/react";
 import { useState } from "react";
 
 import { useLoginUsrMutation } from "../../services/api/apiQuery";
@@ -16,9 +16,8 @@ const Login = () => {
     handleSubmit,
     formState: { isSubmitting },
     reset,
-    setError,
   } = useForm<formFields>();
-
+  const [errors, setErrors] = useState<{ message: string } | null>(null);
   const [loginUser] = useLoginUsrMutation();
 
   const onSubmit: SubmitHandler<formFields> = async (data) => {
@@ -29,25 +28,23 @@ const Login = () => {
     } catch (error) {
       console.log(error);
 
-      setError("root", {
+      setErrors({
         message: `invalid email or password !`,
       });
     }
   };
   return (
     <div className=" min-h-screen h-full flex justify-center items-center ">
-      <Card color="transparent" className="py-6 px-8">
-        <Typography variant="h5" color="blue-gray">
+      <Card className="py-6 px-8 bg-gray-900	">
+        <h2 className=" text-cyan-300 text-2xl font-medium">
           Welcome to Minimedia !{" "}
-        </Typography>
+        </h2>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
         >
           <div className="mb-1 flex flex-col gap-6">
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Email
-            </Typography>
+            <h2 className="-mb-3">Email</h2>
 
             <Input
               type="email"
@@ -60,9 +57,7 @@ const Login = () => {
               }}
             />
 
-            <Typography variant="h6" color="blue-gray" className="-mb-3">
-              Password
-            </Typography>
+            <h2 className="-mb-3">Password</h2>
             <Input
               {...register("password")}
               size="lg"
@@ -76,26 +71,22 @@ const Login = () => {
           <Button
             disabled={isSubmitting}
             type="submit"
-            className="mt-6"
+            className="mt-6 bg-cyan-300"
             fullWidth
           >
             {isSubmitting ? "loading ..." : "sign up"}
           </Button>
-          <Typography color="gray" className="mt-4 text-center font-normal">
+          <h2 className="mt-4 text-center font-normal">
             Don't have an account?{" "}
             <NavLink
               to={"/auth/register"}
-              className="font-medium text-gray-900"
+              className="font-medium text-cyan-300"
             >
               register
             </NavLink>
-          </Typography>
+          </h2>
         </form>
-        {errors.root && (
-          <Typography className="text-red-400" variant="h6">
-            {errors.root.message}
-          </Typography>
-        )}
+        {errors && <h2 className="text-red-400">{errors.message}</h2>}
       </Card>
     </div>
   );
