@@ -8,11 +8,10 @@ export const registerUser = async (req, res) => {
     last_name,
     email,
     password,
-    // friends,
-    // location,
-    // occupation,
-    // viewedProfile,
-    // impressions,
+    friends,
+    location,
+    picturePath,
+    occupation,
   } = req.body;
 
   const isUserExist = await User.findOne({ email });
@@ -31,8 +30,9 @@ export const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       friends,
-      location: "Earth",
-      occupation: "FullStack Developer",
+      location,
+      occupation,
+      picturePath,
       viewedProfile: Math.floor(Math.random() * 10000),
       impressions: Math.floor(Math.random() * 10000),
     });

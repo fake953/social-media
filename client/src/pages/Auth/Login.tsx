@@ -24,6 +24,7 @@ const Login = () => {
     try {
       const res = await loginUser(data);
       console.log(`res`, res);
+      if (res.error) setErrors(res.error.data);
       reset();
     } catch (error) {
       console.log(error);
@@ -44,28 +45,23 @@ const Login = () => {
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
         >
           <div className="mb-1 flex flex-col gap-6">
-            <h2 className="-mb-3">Email</h2>
-
             <Input
               type="email"
               {...register("email")}
               size="lg"
-              placeholder="john@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
+              variant="standard"
+              color="white"
+              label="Email"
+              className="  pl-3"
             />
 
-            <h2 className="-mb-3">Password</h2>
             <Input
               {...register("password")}
               size="lg"
-              placeholder="password"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
+              variant="standard"
+              color="white"
+              label="password"
+              className=" pl-3"
             />
           </div>
           <Button

@@ -1,4 +1,4 @@
-import { Navbar, Typography, Button } from "@material-tailwind/react";
+import { Navbar, Button } from "@material-tailwind/react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -9,7 +9,9 @@ function HomeNav() {
     <Navbar className=" border-none bg-gray-900" fullWidth>
       <div className="flex justify-between px-20">
         <div>
-          <Typography className="text-xl ">Minipedia</Typography>
+          <h2 className="text-xl" onClick={() => navigate("/")}>
+            Minipedia
+          </h2>
         </div>
         <div className="flex justify-between ">
           <div>

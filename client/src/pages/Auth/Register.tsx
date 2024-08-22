@@ -1,21 +1,23 @@
 import { Card, Input, Button } from "@material-tailwind/react";
 
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRegisterUserMutation } from "../../services/api/apiQuery";
-const schema = z.object({
-  first_name: z.string().min(4),
-  last_name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-});
+import { useDropzone } from "react-dropzone";
+import { formFields, schema } from "../../utils/RegisterUtils";
 
-type formFields = z.infer<typeof schema>;
 const Register = () => {
+  const { getInputProps, getRootProps, acceptedFiles } = useDropzone({
+    accept: {
+      "image/jpeg": [".jpeg"],
+      "image/png": [".png"],
+    },
+    maxSize: 10 * 1024 * 1024,
+  });
   const {
     register,
     handleSubmit,
@@ -29,15 +31,15 @@ const Register = () => {
   const [registerUser] = useRegisterUserMutation();
 
   const onSubmit: SubmitHandler<formFields> = async (data) => {
+    data.picturePath = acceptedFiles[0]?.path;
+
     try {
       const res = await registerUser(data);
       console.log(res);
       reset();
-    } catch (error) {
-      console.log(error);
-
+    } catch {
       setError("root", {
-        message: `email has already taken!`,
+        message: `some thing went wrong please try agin later!`,
       });
     }
   };
@@ -53,59 +55,45 @@ const Register = () => {
           className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
         >
           <div className="mb-1 flex flex-col gap-6">
-            <h2 className="-mb-3">First Name</h2>
-            <Input
-              {...register("first_name")}
-              size="lg"
-              placeholder="John"
-              // className="  focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <h2 className="-mb-3 ">Last Name</h2>
-            <Input
-              {...register("last_name")}
-              size="lg"
-              placeholder="Doe"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            <h2 className="-mb-3">Email</h2>
-
-            <Input
-              {...register("email")}
-              size="lg"
-              placeholder="john@mail.com"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            {errors.email && (
-              <h2 className="text-red-400">{errors.email.message}</h2>
-            )}
-            <h2 className="-mb-3">Password</h2>
-            <Input
-              {...register("password")}
-              size="lg"
-              placeholder="password"
-              className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-              labelProps={{
-                className: "before:content-none after:content-none",
-              }}
-            />
-            {errors.password && (
-              <h2 className="text-red-400">{errors.password.message}</h2>
-            )}
+            {formFields.map((f, index) => (
+              <div key={index} className="pt-1">
+                <Input
+                  variant="standard"
+                  label={f.value}
+                  color="white"
+                  required
+                  {...register(f.registerValue)}
+                  className=" pl-3"
+                />
+              </div>
+            ))}
           </div>
+          <div>
+            <div
+              {...getRootProps()}
+              className=" border border-white pl-5 p-3 bg-gray-800 mt-3 cursor-pointer"
+            >
+              <input
+                {...getInputProps()}
+                id="picture"
+                color="white"
+                {...register("picturePath")}
+                className="pt-5 pl-3"
+              />
+              <p>
+                {acceptedFiles[0]?.name
+                  ? acceptedFiles[0]?.name
+                  : "Profile photo"}
+              </p>
+            </div>
+          </div>
+
           <Button
             disabled={isSubmitting}
             type="submit"
             className="mt-6 bg-cyan-300"
             fullWidth
+            variant="filled"
           >
             {isSubmitting ? "loading ..." : "sign up"}
           </Button>
@@ -116,7 +104,11 @@ const Register = () => {
             </NavLink>
           </h2>
         </form>
-        {errors.root && <h2 className="text-red-400">{errors.root.message}</h2>}
+        {errors && (
+          <h2 className="text-red-400">
+            something went wrong please try again later!
+          </h2>
+        )}
       </Card>
     </div>
   );
