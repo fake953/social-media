@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 // import storage from "redux-persist/lib/storage";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import statesReducer from "./slice";
+import userReducer from "./userSlice";
 import { apiQuery } from "../api/apiQuery";
 // import {
 //   persistStore,
@@ -30,6 +31,7 @@ export const store = configureStore({
   reducer: {
     [apiQuery.reducerPath]: apiQuery.reducer,
     states: statesReducer,
+    user: userReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

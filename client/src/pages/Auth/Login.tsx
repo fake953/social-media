@@ -1,9 +1,10 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button, Card, Input } from "@material-tailwind/react";
 import { useState } from "react";
 
 import { useLoginUsrMutation } from "../../services/api/apiQuery";
+import { setItemToLocalStorage } from "../../hooks/token";
 
 type formFields = {
   email: string;
@@ -11,6 +12,7 @@ type formFields = {
 };
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,8 +25,14 @@ const Login = () => {
   const onSubmit: SubmitHandler<formFields> = async (data) => {
     try {
       const res = await loginUser(data);
-      console.log(`res`, res);
-      if (res.error) setErrors(res.error.data);
+      const storeData = {
+        value: res.data.data,
+        itemName: "token",
+      };
+      setItemToLocalStorage(storeData);
+      reset();
+      navigate("/");
+      if (res.error) setErrors(res.error?.data);
       reset();
     } catch (error) {
       console.log(error);

@@ -1,16 +1,22 @@
 import { Card, Input, Button } from "@material-tailwind/react";
 
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import { useForm, SubmitHandler } from "react-hook-form";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDropzone } from "react-dropzone";
 
 import { useRegisterUserMutation } from "../../services/api/apiQuery";
-import { useDropzone } from "react-dropzone";
 import { formFields, schema } from "../../utils/RegisterUtils";
+import { setItemToLocalStorage } from "../../hooks/token";
+
+import { useAppSelector } from "../../services/state/hooks";
 
 const Register = () => {
+  const value = useAppSelector((state) => state.user.token);
+  console.log(value);
+
+  const navigate = useNavigate();
   const { getInputProps, getRootProps, acceptedFiles } = useDropzone({
     accept: {
       "image/jpeg": [".jpeg"],
@@ -30,13 +36,20 @@ const Register = () => {
 
   const [registerUser] = useRegisterUserMutation();
 
-  const onSubmit: SubmitHandler<formFields> = async (data) => {
-    data.picturePath = acceptedFiles[0]?.path;
+  const onSubmit: SubmitHandler<formFields> = async (userInfo) => {
+    userInfo.picturePath = acceptedFiles[0]?.path;
 
     try {
-      const res = await registerUser(data);
-      console.log(res);
+      const {
+        data: { data },
+      } = await registerUser(userInfo);
+      const storeData = {
+        value: data.token,
+        itemName: "token",
+      };
+      setItemToLocalStorage(storeData);
       reset();
+      navigate("/");
     } catch {
       setError("root", {
         message: `some thing went wrong please try agin later!`,
@@ -61,7 +74,6 @@ const Register = () => {
                   variant="standard"
                   label={f.value}
                   color="white"
-                  required
                   {...register(f.registerValue)}
                   className=" pl-3"
                 />
@@ -104,11 +116,13 @@ const Register = () => {
             </NavLink>
           </h2>
         </form>
-        {errors && (
-          <h2 className="text-red-400">
-            something went wrong please try again later!
-          </h2>
-        )}
+        {Object.values(formFields)
+          .map((field) => field.registerValue)
+          .map((v, i) => (
+            <h2 key={i} className="text-red-400">
+              {errors?.[v]?.message}
+            </h2>
+          ))}
       </Card>
     </div>
   );

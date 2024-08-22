@@ -1,12 +1,24 @@
 import * as z from "zod";
 
 export const schema = z.object({
-  first_name: z.string().min(4),
-  last_name: z.string().min(2),
-  email: z.string().email(),
-  password: z.string().min(6),
-  occupation: z.string(),
-  location: z.string(),
+  first_name: z
+    .string({ message: "First Name is required" })
+    .min(4, { message: "First Name should contains 4 characters " }),
+  last_name: z
+    .string({ message: "Last Name is required" })
+    .min(4, { message: "Last Name should contains 4 characters " }),
+  email: z
+    .string({ message: "email field is required" })
+    .email({ message: "please enter a valid email" }),
+  password: z
+    .string()
+    .min(6, { message: "password should contains 6 characters " }),
+  occupation: z
+    .string({ message: "occupation field should be a valid string" })
+    .min(1, { message: "occupation is required" }),
+  location: z
+    .string({ message: "location field should be a valid string" })
+    .min(1, { message: "location is required" }),
   picturePath: z.any(),
 });
 

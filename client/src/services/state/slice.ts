@@ -81,8 +81,8 @@ export const statesSlice = createSlice({
 
 export const {
   setMode,
-  setLogin,
-  setLogout,
+  // setLogin,
+  // setLogout,
   setPosts,
   setPost,
   setUserFriends,

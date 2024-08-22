@@ -7,7 +7,14 @@ import {
   HomeNav,
 } from "../components/home";
 
+import { useEffect } from "react";
+
 const Home = () => {
+  // const token = useAppSelector((state) => state.user.token);
+  // console.log(token);
+
+  useEffect(() => {}, []);
+
   return (
     <div>
       <HomeNav />
