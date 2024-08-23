@@ -4,7 +4,9 @@ import { Button, Card, Input } from "@material-tailwind/react";
 import { useState } from "react";
 
 import { useLoginUsrMutation } from "../../services/api/apiQuery";
-import { setItemToLocalStorage } from "../../hooks/token";
+import { setItemToLocalStorage } from "../../utils/localStorageSetter";
+import { useAppDispatch } from "../../services/state/hooks";
+import { setLogin } from "../../services/state/userSlice";
 
 type formFields = {
   email: string;
@@ -12,6 +14,7 @@ type formFields = {
 };
 
 const Login = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const {
     register,
@@ -25,15 +28,23 @@ const Login = () => {
   const onSubmit: SubmitHandler<formFields> = async (data) => {
     try {
       const res = await loginUser(data);
-      const storeData = {
-        value: res.data.data,
+      console.log(res);
+      if (res?.error) setErrors(res.error?.data);
+      const token = {
+        value: res.data.data.token,
         itemName: "token",
       };
-      setItemToLocalStorage(storeData);
+      const user = {
+        value: JSON.stringify(res.data.data.savedUser),
+        itemName: "user",
+      };
+      setItemToLocalStorage(token);
+      setItemToLocalStorage(user);
+      dispatch(
+        setLogin({ user: res.data.data.savedUser, token: res.data.data.token })
+      );
       reset();
       navigate("/");
-      if (res.error) setErrors(res.error?.data);
-      reset();
     } catch (error) {
       console.log(error);
 

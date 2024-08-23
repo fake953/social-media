@@ -38,6 +38,7 @@ export const registerUser = async (req, res) => {
     });
     const savedUser = await newUser.save();
     const token = await jwt.sign({ _id: savedUser.id }, process.env.JWT_KEY);
+    delete savedUser.password;
     res.status(201).json({
       data: { token, savedUser },
       message: "created",
@@ -53,8 +54,6 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  console.log(user);
-
   if (!user) {
     return res.status(404).json({
       data: null,
@@ -70,7 +69,7 @@ export const loginUser = async (req, res) => {
   }
   const token = await jwt.sign({ _id: user.id }, process.env.JWT_KEY);
   res.status(200).json({
-    data: token,
+    data: { token, savedUser: user },
     message: "successfully logged in !",
   });
 };

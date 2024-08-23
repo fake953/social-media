@@ -1,6 +1,7 @@
 import { Card, Input, Button } from "@material-tailwind/react";
 
 import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,15 +9,16 @@ import { useDropzone } from "react-dropzone";
 
 import { useRegisterUserMutation } from "../../services/api/apiQuery";
 import { formFields, schema } from "../../utils/RegisterUtils";
-import { setItemToLocalStorage } from "../../hooks/token";
-
-import { useAppSelector } from "../../services/state/hooks";
-
+import { useAppDispatch } from "../../services/state/hooks";
+import { setLogin } from "../../services/state/userSlice";
+import {
+  getItemFromLocalStorage,
+  setItemToLocalStorage,
+} from "../../utils/localStorageSetter";
 const Register = () => {
-  const value = useAppSelector((state) => state.user.token);
-  console.log(value);
-
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const { getInputProps, getRootProps, acceptedFiles } = useDropzone({
     accept: {
       "image/jpeg": [".jpeg"],
@@ -43,11 +45,17 @@ const Register = () => {
       const {
         data: { data },
       } = await registerUser(userInfo);
-      const storeData = {
+      const token = {
         value: data.token,
         itemName: "token",
       };
-      setItemToLocalStorage(storeData);
+      const user = {
+        value: JSON.stringify(data.savedUser),
+        itemName: "user",
+      };
+      setItemToLocalStorage(token);
+      setItemToLocalStorage(user);
+      dispatch(setLogin({ user: data.savedUser, token: data.token }));
       reset();
       navigate("/");
     } catch {
@@ -56,6 +64,11 @@ const Register = () => {
       });
     }
   };
+  useEffect(() => {
+    const storedToken = getItemFromLocalStorage("token");
+
+    if (storedToken) navigate("/");
+  }, []);
 
   return (
     <div className=" min-h-screen h-full flex justify-center items-center ">

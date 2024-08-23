@@ -5,7 +5,7 @@ type userType = {
   first_name: string;
   last_name: string;
   email: string;
-  password: string;
+  password?: string;
   picturePath: string;
   friends: string[];
   location: string;
@@ -15,21 +15,24 @@ type userType = {
 };
 
 interface state {
-  //   user: userType | null;
+  user: userType | null;
   token: string | null;
 }
 
 const initialState: state = {
-  //   user: null,
+  user: null,
   token: null,
 };
 const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
-    setLogin: (state, action: PayloadAction<string>) => {
-      //   state.user = action.payload.user;
-      state.token = action.payload;
+    setLogin: (
+      state,
+      action: PayloadAction<{ user: userType; token: string }>
+    ) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
     },
     setLogout: (state) => {
       //   state.user = null;

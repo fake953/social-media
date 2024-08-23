@@ -5,7 +5,7 @@ import Post from "./pages/Post";
 
 import { useAppDispatch } from "./services/state/hooks";
 import { setLogin } from "./services/state/userSlice";
-import { getItemFromLocalStorage } from "./hooks/token";
+import { getItemFromLocalStorage } from "./utils/localStorageSetter";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +25,9 @@ const router = createBrowserRouter([
 
 const App = () => {
   const token = getItemFromLocalStorage("token");
+  const user = JSON.parse(getItemFromLocalStorage("user"));
   const dispatch = useAppDispatch();
-  if (token) dispatch(setLogin(token));
+  if (token && user) dispatch(setLogin({ user, token }));
   return (
     <div className=" h-full min-h-screen bg_dark  ">
       <RouterProvider router={router} />

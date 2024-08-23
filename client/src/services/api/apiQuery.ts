@@ -53,7 +53,12 @@ export const apiQuery = createApi({
     // USER ENDPOINTS
     // GET
     getUserInformation: builder.query({
-      query: (id) => `/users/${id}`,
+      query: (params) => ({
+        url: `/users/${params.id}`,
+        headers: {
+          Authorization: `bearer ${params.secret}`,
+        },
+      }),
     }),
 
     getUserFriends: builder.query({
