@@ -11,7 +11,7 @@ function HomeNav() {
   const navigate = useNavigate();
   return (
     <Navbar className=" border-none bg-gray-900" fullWidth>
-      <div className="flex justify-between px-20">
+      <div className="flex justify-between px-5 lg:10 xl:px-20">
         <div>
           <h2 className="text-xl" onClick={() => navigate("/")}>
             Minipedia
