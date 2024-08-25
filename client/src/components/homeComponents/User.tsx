@@ -5,13 +5,28 @@ import { useAppSelector } from "../../services/state/hooks";
 import { useGetUserInformationQuery } from "../../services/api/apiQuery";
 
 import { getImageAddress } from "../../utils/getImageAddress";
-import { BagIcon, LocationIcon, PenIcon, UserIcon } from "../icons";
+import { BagIcon, LocationIcon, LockIcon, PenIcon, UserIcon } from "../icons";
+import { useNavigate } from "react-router-dom";
 const User = () => {
   const { user, token } = useAppSelector((state) => state.user);
   const { data, isLoading, isError } = useGetUserInformationQuery({
     id: user?._id,
     secret: token,
   });
+  const navigate = useNavigate();
+  if (!user || !token) {
+    return (
+      <div
+        onClick={() => navigate("/auth/login")}
+        className="pb-7 cursor-pointer grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs  place-items-center rounded-lg bg-gray-900"
+      >
+        <LockIcon />
+        <h6 className="text-sm text-start font-thin text-gray-200">
+          Please login to see user details
+        </h6>
+      </div>
+    );
+  }
 
   if (isError || data === undefined)
     <h6 className="text-red-700">something went wrong</h6>;
@@ -25,7 +40,7 @@ const User = () => {
             <div className="flex items-center">
               {" "}
               <img
-                src={getImageAddress(data.data.picturePath)}
+                src={getImageAddress(data?.data?.picturePath)}
                 alt="user photo"
                 className="w-11 h-11 object-cover rounded-full mr-3"
               />

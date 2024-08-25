@@ -19,10 +19,10 @@ const postSchema = new mongoose.Schema({
   userPicturePath: String,
   picturePath: String,
   likes: {
-    type: Map,
-    of: Boolean,
+    type: Array,
+    default: [],
   },
-  comment: {
+  comments: {
     type: Array,
     default: [],
   },

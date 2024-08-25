@@ -23,7 +23,7 @@ export const apiQuery = createApi({
 
     // GET
     getAllPosts: builder.query({
-      query: () => `posts`,
+      query: () => `/posts`,
     }),
     getPost: builder.query({
       query: (id) => `/posts/${id}`,
@@ -34,10 +34,13 @@ export const apiQuery = createApi({
 
     // PATCH
     likePost: builder.mutation({
-      query: ({ id, userId }) => ({
+      query: ({ id, userId, secret }) => ({
         url: `/posts/${id}/like`,
         method: "PATCH",
-        body: userId,
+        body: { userId },
+        headers: {
+          Authorization: `bearer ${secret}`,
+        },
       }),
     }),
 

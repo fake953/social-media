@@ -88,23 +88,27 @@ export const likePost = async (req, res) => {
   try {
     const { id } = req.params;
     const { userId } = req.body;
-    const post = await Post.find({ id });
-    const isLiked = post.likes.get(userId);
+    const post = await Post.findById(id);
+    // console.log(post.likes);
 
-    if (isLiked) {
-      post.likes.delete(userId);
+    // const isLiked = post.likes.get(userId);
+    let newLikeList;
+    if (post.likes.includes(userId)) {
+      newLikeList = post.likes.splice(userId, 1);
+      // filter((id) => String(id) !== userId);
+      console.log("deleted");
     } else {
-      post.likes.set({ userId: true });
+      newLikeList = post.likes.push(userId);
+      console.log("setted");
     }
-    const updatedPost = Post.findByIdAndUpdate(
-      id,
-      {
-        likes: post.likes,
-      },
-      {
-        new: true,
-      }
-    );
+    const updatedPost = await post.save();
+    // Post.findByIdAndUpdate(id, {
+    //   likes: newLikeList,
+    // });
+    res.status(200).json({
+      data: updatedPost,
+      message: "ok",
+    });
   } catch (error) {
     res.status(409).json({
       data: null,
