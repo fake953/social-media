@@ -4,7 +4,14 @@ export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
+    console.log(id);
 
+    if (!user) {
+      return res.status(200).json({
+        data: null,
+        message: "cannot find user with this id",
+      });
+    }
     res.status(200).json({
       data: user,
       message: "ok",

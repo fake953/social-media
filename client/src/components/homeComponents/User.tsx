@@ -14,6 +14,8 @@ const User = () => {
     secret: token,
   });
   const navigate = useNavigate();
+  console.log(data);
+
   if (!user || !token) {
     return (
       <div
@@ -28,8 +30,7 @@ const User = () => {
     );
   }
 
-  if (isError || data === undefined)
-    <h6 className="text-red-700">something went wrong</h6>;
+  if (!data?.data) <h6 className="text-red-700">something went wrong</h6>;
   return (
     <div>
       {isLoading ? (
@@ -46,7 +47,7 @@ const User = () => {
               />
               <div className="">
                 <h1 className="text-md ">
-                  {data.data.first_name} {""} {data.data.last_name}
+                  {data.data?.first_name} {""} {data.data.last_name}
                 </h1>
                 <h6 className="text-sm text-start font-thin text-gray-400">
                   {data.data.friends.length} Friends

@@ -1,11 +1,11 @@
 // export type like = {  };
-export type commentType = {
-  name: string;
-  value: string;
-};
+// export type commentType = {
+//   name: string;
+//   value: string;
+// };
 
 export type postType = {
-  comments: commentType[];
+  comments: string[];
   description: string;
   first_name: string;
   last_name: string;

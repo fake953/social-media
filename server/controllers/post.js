@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import Post from "../model/post.js";
 import User from "../model/user.js";
 
@@ -89,22 +90,21 @@ export const likePost = async (req, res) => {
     const { id } = req.params;
     const { userId } = req.body;
     const post = await Post.findById(id);
-    // console.log(post.likes);
-
-    // const isLiked = post.likes.get(userId);
-    let newLikeList;
     if (post.likes.includes(userId)) {
-      newLikeList = post.likes.splice(userId, 1);
-      // filter((id) => String(id) !== userId);
-      console.log("deleted");
+      await Post.findByIdAndUpdate(id, {
+        $pull: {
+          likes: userId,
+        },
+      });
     } else {
-      newLikeList = post.likes.push(userId);
-      console.log("setted");
+      await Post.findByIdAndUpdate(id, {
+        $push: {
+          likes: userId,
+        },
+      });
     }
-    const updatedPost = await post.save();
-    // Post.findByIdAndUpdate(id, {
-    //   likes: newLikeList,
-    // });
+    const updatedPost = await Post.findById(id);
+
     res.status(200).json({
       data: updatedPost,
       message: "ok",

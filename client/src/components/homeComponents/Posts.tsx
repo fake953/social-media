@@ -10,14 +10,20 @@ import {
   UserPlusIcon,
 } from "../../components/icons";
 import { postType } from "../../Types/postTypes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // import LikePost from "../../utils/likePost";
+type LikePostType = {
+  id: string;
+  userId: string;
+  secret: string;
+};
 const Posts = () => {
+  const [posts, setPosts] = useState<null | postType[]>(null);
+  const [isLiked, setIsLiked] = useState<string>("");
   const [likePost] = useLikePostMutation();
   const [isCommentOpened, setIsCommentOpened] = useState<string | boolean>();
   const { user, token } = useAppSelector((state) => state.user);
   const { data, isLoading } = useGetAllPostsQuery(null);
-  console.table(data?.data);
 
   const handelIsCommentOpened = (id: string) => {
     if (id === isCommentOpened) {
@@ -26,30 +32,36 @@ const Posts = () => {
       setIsCommentOpened(id);
     }
   };
-  const handelLikePost = async ({
-    id,
-    userId,
-    secret,
-  }: {
-    id: string;
-    userId: string;
-    secret: string;
-  }) => {
+  const handelLikePost = async ({ id, userId, secret }: LikePostType) => {
     const res = await likePost({
       id,
       userId,
       secret,
     });
 
-    console.log(res);
+    const newData = posts?.map((p) => {
+      if (p._id === res.data.data._id) {
+        p = res.data.data;
+      }
+      return p;
+    });
+    setPosts(newData!);
+    if (res.data.data.likes.includes(userId)) {
+      setIsLiked(res.data.data._id);
+    } else {
+    }
   };
+  useEffect(() => {
+    setPosts(data?.data);
+  }, [data]);
+
   return (
     <section className="">
       {isLoading ? (
         <div className="grid h-full max-h-[300px] min-h-[160px] w-full  animate-pulse place-items-center rounded-lg bg-gray-900"></div>
       ) : (
         <div className="no-scrollbar h-screen overflow-auto">
-          {data.data.map((post: postType, i: number) => (
+          {posts?.map((post: postType, i: number) => (
             <div key={i} className="mb-8 bg-gray-900 rounded-lg p-5">
               <header className="flex justify-between items-center  pb-3">
                 <div className="flex items-center">
@@ -92,14 +104,14 @@ const Posts = () => {
                       onClick={() =>
                         handelLikePost({
                           id: post._id,
-                          userId: post.userId,
-                          secret: token,
+                          userId: user?._id || "",
+                          secret: token || "",
                         })
                       }
                     >
-                      <HeartIcon />
+                      <HeartIcon color={isLiked === post._id ? true : false} />
                     </div>
-                    <h6>{post.likes?.length}</h6>
+                    <h6>{post.likes.length}</h6>
                   </div>
                   <div className="flex gap-2">
                     <span
@@ -117,11 +129,11 @@ const Posts = () => {
                 </div>
               </footer>
               <ul hidden={Boolean(post._id !== isCommentOpened)}>
-                {post.comments.map((comment) => (
-                  <li className="text-start ">
-                    <h1 className="pt-3">{comment.name}</h1>
+                {post.comments.map((comment, i) => (
+                  <li key={i} className="text-start mt-2">
+                    {/* <h1 className="pt-3">{comment.name}</h1> */}
                     <h3 className="text-sm text-start font-thin text-gray-300">
-                      {comment.value}
+                      {comment}
                     </h3>
                   </li>
                 ))}
