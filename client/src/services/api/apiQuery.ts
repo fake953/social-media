@@ -65,12 +65,21 @@ export const apiQuery = createApi({
     }),
 
     getUserFriends: builder.query({
-      query: (id) => `/users/${id}/friends`,
+      query: ({ id, secret }) => ({
+        url: `/users/${id}/friends`,
+        headers: {
+          Authorization: `bearer ${secret}`,
+        },
+      }),
     }),
     // PATCH
     updateUserFriendsList: builder.mutation({
-      query: ({ id, FriendId }) => ({
-        url: `/users/${id}/${FriendId}`,
+      query: ({ id, friendId, secret }) => ({
+        url: `/users/${id}/${friendId}`,
+        method: "PATCH",
+        headers: {
+          Authorization: `bearer ${secret}`,
+        },
       }),
     }),
   }),

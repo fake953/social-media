@@ -1,20 +1,29 @@
 import linkedin from "../../assets/linkedin.png";
 import twitter from "../../assets/twitter.png";
-import { useAppSelector } from "../../services/state/hooks";
+import { useAppDispatch, useAppSelector } from "../../services/state/hooks";
 
 import { useGetUserInformationQuery } from "../../services/api/apiQuery";
 
 import { getImageAddress } from "../../utils/getImageAddress";
 import { BagIcon, LocationIcon, LockIcon, PenIcon, UserIcon } from "../icons";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { setUser } from "../../services/state/userSlice";
 const User = () => {
   const { user, token } = useAppSelector((state) => state.user);
-  const { data, isLoading, isError } = useGetUserInformationQuery({
+  const dispatch = useAppDispatch();
+  const { data, isLoading } = useGetUserInformationQuery({
     id: user?._id,
     secret: token,
   });
+
   const navigate = useNavigate();
-  console.log(data);
+
+  useEffect(() => {
+    if (!data || isLoading) return;
+
+    dispatch(setUser(data.data));
+  }, [data]);
 
   if (!user || !token) {
     return (
@@ -30,7 +39,6 @@ const User = () => {
     );
   }
 
-  if (!data?.data) <h6 className="text-red-700">something went wrong</h6>;
   return (
     <div>
       {isLoading ? (
@@ -41,16 +49,16 @@ const User = () => {
             <div className="flex items-center">
               {" "}
               <img
-                src={getImageAddress(data?.data?.picturePath)}
+                src={getImageAddress(user.picturePath)}
                 alt="user photo"
                 className="w-11 h-11 object-cover rounded-full mr-3"
               />
               <div className="">
                 <h1 className="text-md ">
-                  {data.data?.first_name} {""} {data.data.last_name}
+                  {user.first_name} {""} {user.last_name}
                 </h1>
                 <h6 className="text-sm text-start font-thin text-gray-400">
-                  {data.data.friends.length} Friends
+                  {user.friends.length} Friends
                 </h6>
               </div>
             </div>
@@ -65,13 +73,13 @@ const User = () => {
               <div className="flex justify-start gap-4 my-3">
                 <LocationIcon />
                 <h6 className="font-thin text-sm pt-0.5 text-gray-400">
-                  {data.data.location}
+                  {user.location}
                 </h6>
               </div>
               <div className="flex justify-start gap-4 my-3">
                 <BagIcon />
                 <h6 className="font-thin text-sm pt-0.5 text-gray-400">
-                  {data.data.occupation}
+                  {user.occupation}
                 </h6>
               </div>
             </section>
@@ -82,15 +90,13 @@ const User = () => {
                   <h6 className="font-thin text-sm pt-0.5 text-gray-400">
                     Who's viewed your profile
                   </h6>
-                  <h6 className="font-thin  pt-0.5">
-                    {data.data.viewedProfile}
-                  </h6>
+                  <h6 className="font-thin  pt-0.5">{user.viewedProfile}</h6>
                 </div>
                 <div className="flex justify-between items-center">
                   <h6 className="font-thin text-sm pt-0.5 text-gray-400">
                     Impressions of your post
                   </h6>
-                  <h6 className="font-thin  pt-0.5">{data.data.impressions}</h6>
+                  <h6 className="font-thin  pt-0.5">{user.impressions}</h6>
                 </div>
               </div>
             </section>

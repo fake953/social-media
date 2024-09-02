@@ -39,7 +39,7 @@ const Register = () => {
   const [registerUser] = useRegisterUserMutation();
 
   const onSubmit: SubmitHandler<formFields> = async (userInfo) => {
-    userInfo.picturePath = acceptedFiles[0]?.path;
+    userInfo.picturePath = acceptedFiles[0].path!;
 
     try {
       const {

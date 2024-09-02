@@ -59,13 +59,13 @@ export const statesSlice = createSlice({
       state.user = null;
       state.token = null;
     },
-    setUserFriends: (state, action) => {
-      if (state.user) {
-        state.user.friends = action.payload.friends;
-      } else {
-        console.error("user friends non-existent :(");
-      }
-    },
+    // setUserFriends: (state, action) => {
+    //   if (state.user) {
+    //     state.user.friends = action.payload.friends;
+    //   } else {
+    //     console.error("user friends non-existent :(");
+    //   }
+    // },
     setPosts: (state, action) => {
       state.posts = action.payload.posts;
     },
@@ -85,6 +85,6 @@ export const {
   // setLogout,
   setPosts,
   setPost,
-  setUserFriends,
+  // setUserFriends,
 } = statesSlice.actions;
 export default statesSlice.reducer;

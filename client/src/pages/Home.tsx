@@ -13,13 +13,13 @@ const Home = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className=" ">
+    <div>
       <HomeNav />
-      <div className="container	mx-auto w-full px-12 grid grid-flow-col grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-8 mt-5 2xl:grid-cols-4">
+      <div className="container	mx-auto w-full  grid grid-flow-col grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-8 mt-5 2xl:grid-cols-4">
         <div className=" text-center hidden md:block col-span-1 ">
           <User />
         </div>
-        <div className=" text-center   col-span-1 2xl:col-span-2">
+        <div className=" text-center  col-span-1  2xl:col-span-2">
           {/* <CreatePost /> */}
           <Posts />
         </div>

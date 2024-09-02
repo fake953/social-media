@@ -1,5 +1,8 @@
-import { useAppSelector } from "../../services/state/hooks";
-import { useGetAllPostsQuery } from "../../services/api/apiQuery";
+import { useAppDispatch, useAppSelector } from "../../services/state/hooks";
+import {
+  useGetAllPostsQuery,
+  useUpdateUserFriendsListMutation,
+} from "../../services/api/apiQuery";
 import { useLikePostMutation } from "../../services/api/apiQuery";
 
 import { getImageAddress } from "../../utils/getImageAddress";
@@ -7,22 +10,31 @@ import {
   CommentIcon,
   HeartIcon,
   ShareIcon,
+  UserMinesIcon,
   UserPlusIcon,
 } from "../../components/icons";
 import { postType } from "../../Types/postTypes";
 import { useState, useEffect } from "react";
-// import LikePost from "../../utils/likePost";
+import { setUserFriends } from "../../services/state/userSlice";
 type LikePostType = {
   id: string;
   userId: string;
   secret: string;
 };
+type UpdateUserFriendsType = {
+  id: string;
+  friendId: string;
+  secret: string;
+};
+
 const Posts = () => {
   const [posts, setPosts] = useState<null | postType[]>(null);
   const [isLiked, setIsLiked] = useState<string>("");
   const [likePost] = useLikePostMutation();
+  const [updateUserFriendsList] = useUpdateUserFriendsListMutation();
   const [isCommentOpened, setIsCommentOpened] = useState<string | boolean>();
   const { user, token } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const { data, isLoading } = useGetAllPostsQuery(null);
 
   const handelIsCommentOpened = (id: string) => {
@@ -30,6 +42,20 @@ const Posts = () => {
       setIsCommentOpened(false);
     } else if (id !== isCommentOpened) {
       setIsCommentOpened(id);
+    }
+  };
+  const handelUpdateUserFriends = async ({
+    id,
+    friendId,
+    secret,
+  }: UpdateUserFriendsType) => {
+    try {
+      const res = await updateUserFriendsList({ id, friendId, secret });
+
+      dispatch(setUserFriends(res.data.data));
+      console.log(user);
+    } catch (error) {
+      console.log(error);
     }
   };
   const handelLikePost = async ({ id, userId, secret }: LikePostType) => {
@@ -49,6 +75,14 @@ const Posts = () => {
     if (res.data.data.likes.includes(userId)) {
       setIsLiked(res.data.data._id);
     } else {
+      setIsLiked("");
+    }
+  };
+  const checkIsFriend = (creatorOfPostId: string) => {
+    if (user?.friends.includes(creatorOfPostId)) {
+      return <UserMinesIcon />;
+    } else {
+      return <UserPlusIcon />;
     }
   };
   useEffect(() => {
@@ -81,8 +115,17 @@ const Posts = () => {
                     </h6>
                   </div>
                 </div>
-                <div className="bg-gray-800 rounded-full p-0.5">
-                  <UserPlusIcon />
+                <div
+                  className="bg-gray-800 rounded-full p-1 cursor-pointer"
+                  onClick={() =>
+                    handelUpdateUserFriends({
+                      id: user?._id || "",
+                      friendId: post.userId,
+                      secret: token || "",
+                    })
+                  }
+                >
+                  {checkIsFriend(post.userId)}
                 </div>
               </header>
 

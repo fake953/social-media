@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type userType = {
+export type userType = {
   _id: string;
   first_name: string;
   last_name: string;
@@ -16,12 +16,12 @@ type userType = {
 
 interface state {
   user: userType | null;
-  token: string | null;
+  token: string | string;
 }
 
 const initialState: state = {
   user: null,
-  token: null,
+  token: "",
 };
 const userSlice = createSlice({
   name: "userSlice",
@@ -36,11 +36,22 @@ const userSlice = createSlice({
     },
     setLogout: (state) => {
       //   state.user = null;
-      state.token = null;
+      state.token = "";
+    },
+    setUser: (state, action: PayloadAction<userType>) => {
+      state.user = action.payload;
+    },
+    setUserFriends: (state, action) => {
+      if (state.user) {
+        state.user.friends = action.payload;
+      } else {
+        console.error("user friends non-existent :(");
+      }
     },
   },
 });
 
-export const { setLogin, setLogout } = userSlice.actions;
+export const { setLogin, setLogout, setUserFriends, setUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;

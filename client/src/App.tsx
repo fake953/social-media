@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/Home";
 import { Login, Register } from "./pages/Auth";
-import Post from "./pages/Post";
+import Profile from "./pages/Profile";
 
 import { useAppDispatch } from "./services/state/hooks";
 import { setLogin } from "./services/state/userSlice";
@@ -13,6 +13,10 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
+    path: "/Profile/:id",
+    element: <Profile />,
+  },
+  {
     path: "/auth/login",
     element: <Login />,
   },
@@ -20,12 +24,11 @@ const router = createBrowserRouter([
     path: "/auth/Register",
     element: <Register />,
   },
-  { path: "/posts", element: <Post /> },
 ]);
 
 const App = () => {
   const token = getItemFromLocalStorage("token");
-  const user = JSON.parse(getItemFromLocalStorage("user"));
+  const user = JSON.parse(getItemFromLocalStorage("user")!);
   const dispatch = useAppDispatch();
   if (token && user) dispatch(setLogin({ user, token }));
   return (

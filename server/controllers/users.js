@@ -4,7 +4,6 @@ export const getUser = async (req, res) => {
   try {
     const { id } = req.params;
     const user = await User.findById(id);
-    console.log(id);
 
     if (!user) {
       return res.status(200).json({
@@ -61,9 +60,8 @@ export const addRemoveFriend = async (req, res) => {
 
     const user = await User.findById(id);
     const newFriend = await User.findById(friendId);
-
-    if (user.friends.includes(friendId)) {
-      user.friends = user.friends.filter((id) => id !== friendId);
+    if (user?.friends?.includes(friendId)) {
+      user.friends = user.friends?.filter((id) => id !== friendId);
       newFriend.friends = newFriend.friends.filter((id) => id !== id);
     } else {
       user.friends.push(friendId);
@@ -73,23 +71,26 @@ export const addRemoveFriend = async (req, res) => {
     await user.save();
     await newFriend.save();
 
-    const userAllFriendsDetail = await Promise.all(
-      user.friends.map((id) => User.findById(id))
-    );
-    const formattedFriends = userAllFriendsDetail.map(
-      ({ _id, first_name, last_name, picturePath, location, occupation }) => {
-        return {
-          _id,
-          first_name,
-          last_name,
-          picturePath,
-          location,
-          occupation,
-        };
-      }
-    );
+    // const userAllFriendsDetail = await Promise.all(
+    //   user.friends.map((id) => User.findById(id))
+    // );
+    // const formattedFriends = userAllFriendsDetail.map(
+    //   ({ _id, first_name, last_name, picturePath, location, occupation }) => {
+    //     return {
+    //       _id,
+    //       first_name,
+    //       last_name,
+    //       picturePath,
+    //       location,
+    //       occupation,
+    //     };
+    //   }
+    // );
+    const updatedUser = await User.findById(id);
+    const userFriends = updatedUser.friends;
+
     res.status(200).json({
-      data: formattedFriends,
+      data: userFriends,
       message: "ok",
     });
   } catch (error) {
