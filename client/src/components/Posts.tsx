@@ -1,21 +1,19 @@
-import { useAppDispatch, useAppSelector } from "../../services/state/hooks";
-import {
-  useGetAllPostsQuery,
-  useUpdateUserFriendsListMutation,
-} from "../../services/api/apiQuery";
-import { useLikePostMutation } from "../../services/api/apiQuery";
-
-import { getImageAddress } from "../../utils/getImageAddress";
+import { useAppDispatch, useAppSelector } from "../services/state/hooks";
+import { useUpdateUserFriendsListMutation } from "../services/api/apiQuery";
+import { useLikePostMutation } from "../services/api/apiQuery";
+import { getImageAddress } from "../utils/getImageAddress";
 import {
   CommentIcon,
   HeartIcon,
   ShareIcon,
   UserMinesIcon,
   UserPlusIcon,
-} from "../../components/icons";
-import { postType } from "../../Types/postTypes";
+} from "./icons";
+import { postType } from "../Types/postTypes";
 import { useState, useEffect } from "react";
-import { setUserFriends } from "../../services/state/userSlice";
+import { setUserFriends } from "../services/state/userSlice";
+import alertFunction from "../utils/alert";
+import { useNavigate } from "react-router-dom";
 type LikePostType = {
   id: string;
   userId: string;
@@ -26,16 +24,19 @@ type UpdateUserFriendsType = {
   friendId: string;
   secret: string;
 };
-
-const Posts = () => {
+type Props = {
+  data: postType[] | null;
+  isLoading: boolean;
+  parent: string;
+};
+const Posts = ({ data, isLoading, parent }: Props) => {
   const [posts, setPosts] = useState<null | postType[]>(null);
-  const [isLiked, setIsLiked] = useState<string>("");
   const [likePost] = useLikePostMutation();
   const [updateUserFriendsList] = useUpdateUserFriendsListMutation();
   const [isCommentOpened, setIsCommentOpened] = useState<string | boolean>();
   const { user, token } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  const { data, isLoading } = useGetAllPostsQuery(null);
+  const navigate = useNavigate();
 
   const handelIsCommentOpened = (id: string) => {
     if (id === isCommentOpened) {
@@ -49,16 +50,21 @@ const Posts = () => {
     friendId,
     secret,
   }: UpdateUserFriendsType) => {
+    if (!user || !token) {
+      return alertFunction("add friends");
+    }
     try {
       const res = await updateUserFriendsList({ id, friendId, secret });
 
       dispatch(setUserFriends(res.data.data));
-      console.log(user);
     } catch (error) {
       console.log(error);
     }
   };
   const handelLikePost = async ({ id, userId, secret }: LikePostType) => {
+    if (!user || !token) {
+      return alertFunction("like a post");
+    }
     const res = await likePost({
       id,
       userId,
@@ -72,11 +78,6 @@ const Posts = () => {
       return p;
     });
     setPosts(newData!);
-    if (res.data.data.likes.includes(userId)) {
-      setIsLiked(res.data.data._id);
-    } else {
-      setIsLiked("");
-    }
   };
   const checkIsFriend = (creatorOfPostId: string) => {
     if (user?.friends.includes(creatorOfPostId)) {
@@ -86,7 +87,7 @@ const Posts = () => {
     }
   };
   useEffect(() => {
-    setPosts(data?.data);
+    setPosts(data);
   }, [data]);
 
   return (
@@ -98,7 +99,10 @@ const Posts = () => {
           {posts?.map((post: postType, i: number) => (
             <div key={i} className="mb-8 bg-gray-900 rounded-lg p-5">
               <header className="flex justify-between items-center  pb-3">
-                <div className="flex items-center">
+                <div
+                  onClick={() => navigate(`/profile/${post.userId}`)}
+                  className="flex items-center cursor-pointer"
+                >
                   {" "}
                   <img
                     src={getImageAddress(post.userPicturePath)}
@@ -115,18 +119,20 @@ const Posts = () => {
                     </h6>
                   </div>
                 </div>
-                <div
-                  className="bg-gray-800 rounded-full p-1 cursor-pointer"
-                  onClick={() =>
-                    handelUpdateUserFriends({
-                      id: user?._id || "",
-                      friendId: post.userId,
-                      secret: token || "",
-                    })
-                  }
-                >
-                  {checkIsFriend(post.userId)}
-                </div>
+                {parent === "Home" && (
+                  <div
+                    className="bg-gray-800 rounded-full p-1 cursor-pointer"
+                    onClick={() =>
+                      handelUpdateUserFriends({
+                        id: user?._id || "",
+                        friendId: post.userId,
+                        secret: token || "",
+                      })
+                    }
+                  >
+                    {checkIsFriend(post.userId)}
+                  </div>
+                )}
               </header>
 
               <main>
@@ -152,7 +158,13 @@ const Posts = () => {
                         })
                       }
                     >
-                      <HeartIcon color={isLiked === post._id ? true : false} />
+                      <HeartIcon
+                        color={
+                          post.likes.includes(user ? user._id : "")
+                            ? true
+                            : false
+                        }
+                      />
                     </div>
                     <h6>{post.likes.length}</h6>
                   </div>

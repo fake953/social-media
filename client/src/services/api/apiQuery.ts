@@ -64,7 +64,7 @@ export const apiQuery = createApi({
       }),
     }),
 
-    getUserFriends: builder.query({
+    getUserFriends: builder.mutation({
       query: ({ id, secret }) => ({
         url: `/users/${id}/friends`,
         headers: {
@@ -82,6 +82,12 @@ export const apiQuery = createApi({
         },
       }),
     }),
+    getOtherUsersDetail: builder.query({
+      query: ({ id }) => `/users/profiles/${id}`,
+    }),
+    getOtherUsersFriends: builder.mutation({
+      query: ({ id }) => `/users/profiles/${id}/friends`,
+    }),
   }),
 });
 export const {
@@ -93,6 +99,8 @@ export const {
   useLikePostMutation,
   useGetPostQuery,
   useGetUserInformationQuery,
-  useGetUserFriendsQuery,
+  useGetUserFriendsMutation,
   useUpdateUserFriendsListMutation,
+  useGetOtherUsersDetailQuery,
+  useGetOtherUsersFriendsMutation,
 } = apiQuery;

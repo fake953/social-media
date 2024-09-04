@@ -100,3 +100,57 @@ export const addRemoveFriend = async (req, res) => {
     });
   }
 };
+
+export const getOtherUsersDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(200).json({
+        data: null,
+        message: "cannot find user with this id",
+      });
+    }
+    res.status(200).json({
+      data: user,
+      message: "ok",
+    });
+  } catch (error) {
+    res.status(404).json({
+      data: null,
+      message: error.message,
+    });
+  }
+};
+
+export const getOtherUsersFriends = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { friends } = await User.findById(id);
+    const userFriendsDetail = await Promise.all(
+      friends.map((id) => User.findById(id))
+    );
+    const formattedFriends = userFriendsDetail.map(
+      ({ _id, first_name, last_name, picturePath, location, occupation }) => {
+        return {
+          _id,
+          first_name,
+          last_name,
+          picturePath,
+          location,
+          occupation,
+        };
+      }
+    );
+    res.status(200).json({
+      data: formattedFriends,
+      message: "ok",
+    });
+  } catch (error) {
+    res.status(404).json({
+      data: null,
+      message: error.message,
+    });
+  }
+};
