@@ -10,6 +10,7 @@ import UserMinesIcon from "./UserMinesIcon";
 import HeartIcon from "./HeartIcon";
 import ShareIcon from "./ShareIcon";
 import CommentIcon from "./CommentIcon";
+import LeftIcon from "./LeftIcon";
 
 export {
   SunIcon,
@@ -24,4 +25,5 @@ export {
   HeartIcon,
   ShareIcon,
   CommentIcon,
+  LeftIcon,
 };

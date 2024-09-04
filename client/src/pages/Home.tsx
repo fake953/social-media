@@ -3,11 +3,7 @@ import {
   useGetUserFriendsMutation,
   useGetUserInformationQuery,
 } from "../services/api/apiQuery";
-import {
-  // CreatePost,
-  Ads,
-  HomeNav,
-} from "../components/homeComponents";
+import { Ads, CreatePost, HomeNav } from "../components/homeComponents";
 import Posts from "../components/Posts";
 import User from "../components/User";
 import Friends from "../components/Friends";
@@ -46,7 +42,7 @@ const Home = () => {
           )}
         </div>
         <div className=" text-center  col-span-1  2xl:col-span-2">
-          {/* <CreatePost /> */}
+          <CreatePost />
           <Posts data={data?.data} isLoading={isLoading} parent="Home" />
         </div>
         <div className=" text-center hidden xl:block xl:col-span-1">
