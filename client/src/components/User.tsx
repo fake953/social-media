@@ -18,7 +18,7 @@ const User = ({ data, parent }: Props) => {
     return (
       <div
         onClick={() => navigate("/auth/login")}
-        className="pb-7 cursor-pointer grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs  place-items-center rounded-lg bg-gray-900"
+        className="pb-7 cursor-pointer grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs  place-items-center rounded-lg bg-card"
       >
         <LockIcon />
         <h6 className="text-sm text-start font-thin text-gray-200">
@@ -31,9 +31,9 @@ const User = ({ data, parent }: Props) => {
   return (
     <div>
       {!data ? (
-        <div className="grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs animate-pulse place-items-center rounded-lg bg-gray-900"></div>
+        <div className="grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs animate-pulse place-items-center rounded-lg bg-card"></div>
       ) : (
-        <div color="gray" className="py-4 px-4 rounded-md  bg-gray-900">
+        <div color="gray" className="py-4 px-4 rounded-md  bg-card">
           <header className="flex justify-between items-center border-b border-gray-600 pb-3">
             <div className="flex items-center">
               {" "}

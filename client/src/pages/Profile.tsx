@@ -33,7 +33,7 @@ const Profile = () => {
   }, [id, getOtherUsersFriends]);
 
   return (
-    <div>
+    <div className="bg-background">
       <Navbar />
       <div className="container	mx-auto  grid  grid-flow-row grid-cols-1 gap-5  md:grid-cols-2 xl:grid-cols-3 md:gap-8 mt-5 2xl:grid-cols-4">
         <div className=" text-center   md:block col-span-1 ">

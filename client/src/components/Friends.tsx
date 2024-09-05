@@ -41,7 +41,7 @@ const Friends = ({ data, parent }: Props) => {
   };
   if (!token || !user) return;
   return (
-    <div className="bg-gray-900 rounded-md p-4 mt-8 ">
+    <div className="bg-card rounded-md p-4 mt-8 ">
       <h1 className="text-start">Friends List</h1>
       <ul>
         {data?.map((f) => (

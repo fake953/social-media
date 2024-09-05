@@ -11,6 +11,10 @@ import HeartIcon from "./HeartIcon";
 import ShareIcon from "./ShareIcon";
 import CommentIcon from "./CommentIcon";
 import LeftIcon from "./LeftIcon";
+import AttachmentIcon from "./AttachmentIcon";
+import ImageIcon from "./ImageIcon";
+import MicrophoneIcon from "./MicrophoneIcon";
+import UploadIcon from "./UploadIcon";
 
 export {
   SunIcon,
@@ -26,4 +30,8 @@ export {
   ShareIcon,
   CommentIcon,
   LeftIcon,
+  AttachmentIcon,
+  UploadIcon,
+  MicrophoneIcon,
+  ImageIcon,
 };

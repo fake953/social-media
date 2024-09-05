@@ -93,11 +93,11 @@ const Posts = ({ data, isLoading, parent }: Props) => {
   return (
     <section className="">
       {isLoading ? (
-        <div className="grid h-full max-h-[300px] min-h-[160px] w-full  animate-pulse place-items-center rounded-lg bg-gray-900"></div>
+        <div className="grid h-full max-h-[300px] min-h-[160px] w-full  animate-pulse place-items-center rounded-lg bg-card"></div>
       ) : (
         <div className="no-scrollbar h-screen overflow-auto">
           {posts?.map((post: postType, i: number) => (
-            <div key={i} className="mb-8 bg-gray-900 rounded-lg p-5">
+            <div key={i} className="mb-8 bg-card rounded-lg p-5">
               <header className="flex justify-between items-center  pb-3">
                 <div
                   onClick={() => navigate(`/profile/${post.userId}`)}

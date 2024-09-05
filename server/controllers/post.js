@@ -27,7 +27,7 @@ export const createPost = async (req, res) => {
       last_name: user.last_name,
       location: user.location,
       userPicturePath: user.picturePath,
-      likes: {},
+      likes: [],
       comments: [],
     });
     const createdPost = await newPost.save();

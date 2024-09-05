@@ -45,11 +45,14 @@ export const apiQuery = createApi({
     }),
 
     // POST
-    createPost: builder.query({
-      query: (data) => ({
+    createPost: builder.mutation({
+      query: ({ userId, description, picturePath, secret }) => ({
         url: "/posts",
         method: "POST",
-        body: data,
+        body: { userId, description, picturePath },
+        headers: {
+          Authorization: `bearer ${secret}`,
+        },
       }),
     }),
 
@@ -94,7 +97,7 @@ export const {
   useGetAllPostsQuery,
   useRegisterUserMutation,
   useLoginUsrMutation,
-  useCreatePostQuery,
+  useCreatePostMutation,
   useGetUserPostsQuery,
   useLikePostMutation,
   useGetPostQuery,

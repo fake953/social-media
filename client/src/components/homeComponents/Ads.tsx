@@ -1,7 +1,7 @@
 import ads from "../../assets/ads.jpg";
 const Ads = () => {
   return (
-    <section className="w-full bg-gray-900 rounded-md p-4 flex flex-col gap-3">
+    <section className="w-full bg-card  rounded-md p-4 flex flex-col gap-3">
       <div className="flex justify-between">
         <h1 className="text-lg ">Sponsored</h1>
         <h6 className="text-md font-thin">Ads</h6>

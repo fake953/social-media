@@ -7,20 +7,20 @@ const Navbar = () => {
 
   return (
     <div>
-      <nav className="h-16 bg-gray-900">
+      <nav className="h-16 bg-card">
         <div className="flex justify-between px-5 lg:px-10 xl:px-20 pt-3.5">
           <h2 className="text-xl" onClick={() => navigate("/")}>
             Minipedia
           </h2>
           <div>
-            <Button
+            <button
               onClick={() => navigate("/")}
-              size="sm"
-              variant="gradient"
-              className=" flex"
+              // size="sm"
+              // variant="gradient"
+              className=" flex btn"
             >
-              <LeftIcon /> <span className="mt-1 text lg">Home</span>
-            </Button>
+              <LeftIcon /> <span className="mt-0.5 text lg">Home</span>
+            </button>
           </div>
         </div>
       </nav>

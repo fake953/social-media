@@ -32,7 +32,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   if (token && user) dispatch(setLogin({ user, token }));
   return (
-    <div className=" h-full min-h-screen bg_dark  ">
+    <div className=" h-full min-h-screen dark">
       <RouterProvider router={router} />
     </div>
   );

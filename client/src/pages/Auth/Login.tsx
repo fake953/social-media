@@ -58,7 +58,7 @@ const Login = () => {
     <div>
       <Navbar />
       <div className=" min-h-screen h-full flex justify-center items-center ">
-        <Card className="py-6 px-8 bg-gray-900	">
+        <Card className="py-6 px-8 bg-card	">
           <h2 className=" text-cyan-300 text-2xl font-medium">
             Welcome to Minipedia !{" "}
           </h2>
