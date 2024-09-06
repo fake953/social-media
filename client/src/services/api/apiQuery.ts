@@ -46,10 +46,10 @@ export const apiQuery = createApi({
 
     // POST
     createPost: builder.mutation({
-      query: ({ userId, description, picturePath, secret }) => ({
+      query: ({ formData, secret }) => ({
         url: "/posts",
         method: "POST",
-        body: { userId, description, picturePath },
+        body: formData,
         headers: {
           Authorization: `bearer ${secret}`,
         },
@@ -58,7 +58,7 @@ export const apiQuery = createApi({
 
     // USER ENDPOINTS
     // GET
-    getUserInformation: builder.query({
+    getUserInformation: builder.mutation({
       query: (params) => ({
         url: `/users/${params.id}`,
         headers: {
@@ -101,7 +101,7 @@ export const {
   useGetUserPostsQuery,
   useLikePostMutation,
   useGetPostQuery,
-  useGetUserInformationQuery,
+  useGetUserInformationMutation,
   useGetUserFriendsMutation,
   useUpdateUserFriendsListMutation,
   useGetOtherUsersDetailQuery,

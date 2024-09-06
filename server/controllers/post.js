@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import Post from "../model/post.js";
 import User from "../model/user.js";
 
@@ -16,6 +15,7 @@ export const getAllPosts = async (req, res) => {
 };
 export const createPost = async (req, res) => {
   const { userId, description, picturePath } = req.body;
+  console.log(picturePath);
 
   try {
     const user = await User.findById(userId);

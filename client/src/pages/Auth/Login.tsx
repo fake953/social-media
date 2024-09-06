@@ -58,7 +58,7 @@ const Login = () => {
     <div>
       <Navbar />
       <div className=" min-h-screen h-full flex justify-center items-center ">
-        <Card className="py-6 px-8 bg-card	">
+        <div className="py-6 px-8 bg-card	rounded-lg">
           <h2 className=" text-cyan-300 text-2xl font-medium">
             Welcome to Minipedia !{" "}
           </h2>
@@ -67,33 +67,26 @@ const Login = () => {
             className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
           >
             <div className="mb-1 flex flex-col gap-6">
-              <Input
+              <input
                 type="email"
                 {...register("email")}
-                size="lg"
-                variant="standard"
-                color="white"
-                label="Email"
-                className="  pl-3"
+                placeholder="Email"
+                className="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
               />
 
-              <Input
+              <input
                 {...register("password")}
-                size="lg"
-                variant="standard"
-                color="white"
-                label="password"
-                className=" pl-3"
+                placeholder="password"
+                className="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
               />
             </div>
-            <Button
+            <button
               disabled={isSubmitting}
               type="submit"
-              className="mt-6 bg-cyan-300"
-              fullWidth
+              className="mt-6 btn w-full"
             >
               {isSubmitting ? "loading ..." : "sign up"}
-            </Button>
+            </button>
             <h2 className="mt-4 text-center font-normal">
               Don't have an account?{" "}
               <NavLink
@@ -105,7 +98,7 @@ const Login = () => {
             </h2>
           </form>
           {errors && <h2 className="text-red-400">{errors.message}</h2>}
-        </Card>
+        </div>
       </div>
     </div>
   );

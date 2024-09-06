@@ -1,33 +1,14 @@
 import linkedin from "../assets/linkedin.png";
 import twitter from "../assets/twitter.png";
-import { useAppSelector } from "../services/state/hooks";
 
 import { getImageAddress } from "../utils/getImageAddress";
-import { BagIcon, LocationIcon, LockIcon, PenIcon, UserIcon } from "./icons";
-import { useNavigate } from "react-router-dom";
+import { BagIcon, LocationIcon, PenIcon, UserIcon } from "./icons";
 import { userType } from "../services/state/userSlice";
 type Props = {
   data: userType;
   parent: string;
 };
-const User = ({ data, parent }: Props) => {
-  const { user, token } = useAppSelector((state) => state.user);
-  const navigate = useNavigate();
-
-  if ((parent === "Home" && !user) || !token) {
-    return (
-      <div
-        onClick={() => navigate("/auth/login")}
-        className="pb-7 cursor-pointer grid h-full max-h-[300px] min-h-[160px] w-full max-w-xs  place-items-center rounded-lg bg-card"
-      >
-        <LockIcon />
-        <h6 className="text-sm text-start font-thin text-gray-200">
-          Please login to see user details
-        </h6>
-      </div>
-    );
-  }
-
+const User = ({ data }: Props) => {
   return (
     <div>
       {!data ? (

@@ -6,6 +6,9 @@ import Profile from "./pages/Profile";
 import { useAppDispatch } from "./services/state/hooks";
 import { setLogin } from "./services/state/userSlice";
 import { getItemFromLocalStorage } from "./utils/localStorageSetter";
+import { useGetUserInformationMutation } from "./services/api/apiQuery";
+import { useEffect } from "react";
+import alertFunction from "./utils/alert";
 
 const router = createBrowserRouter([
   {
@@ -27,10 +30,32 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  const token = getItemFromLocalStorage("token");
-  const user = JSON.parse(getItemFromLocalStorage("user")!);
   const dispatch = useAppDispatch();
-  if (token && user) dispatch(setLogin({ user, token }));
+  const [getUserInformation] = useGetUserInformationMutation();
+  useEffect(() => {
+    try {
+      const token = getItemFromLocalStorage("token");
+      const user = JSON.parse(getItemFromLocalStorage("user")!);
+
+      if (token && user) {
+        const setUser = async () => {
+          const res = await getUserInformation({
+            id: user._id,
+            secret: token,
+          });
+          console.log(res);
+          dispatch(setLogin({ user: res.data.data, token }));
+        };
+        setUser();
+      } else {
+        alertFunction("create post");
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
   return (
     <div className=" h-full min-h-screen dark">
       <RouterProvider router={router} />

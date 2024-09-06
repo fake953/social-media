@@ -119,7 +119,7 @@ const Posts = ({ data, isLoading, parent }: Props) => {
                     </h6>
                   </div>
                 </div>
-                {parent === "Home" && (
+                {parent === "Home" && post.userId !== user?._id && (
                   <div
                     className="bg-gray-800 rounded-full p-1 cursor-pointer"
                     onClick={() =>

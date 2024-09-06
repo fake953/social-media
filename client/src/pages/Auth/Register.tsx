@@ -1,5 +1,3 @@
-import { Card, Input, Button } from "@material-tailwind/react";
-
 import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -75,7 +73,7 @@ const Register = () => {
     <div>
       <Navbar />
       <div className=" min-h-screen h-full flex justify-center items-center ">
-        <Card color="gray" className="py-6 px-8 bg-card	">
+        <div color="gray" className="py-6 px-8 bg-card rounded-lg	">
           <h2 className=" text-cyan-300 text-2xl font-medium">
             Welcome to Minipedia !{" "}
           </h2>
@@ -86,12 +84,12 @@ const Register = () => {
             <div className="mb-1 flex flex-col gap-6">
               {formFields.map((f, index) => (
                 <div key={index} className="pt-1">
-                  <Input
-                    variant="standard"
-                    label={f.value}
-                    color="white"
+                  <input
                     {...register(f.registerValue)}
-                    className=" pl-3"
+                    placeholder={f.value}
+                    type="text"
+                    id="floating_standard"
+                    className="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0 peer"
                   />
                 </div>
               ))}
@@ -116,15 +114,13 @@ const Register = () => {
               </div>
             </div>
 
-            <Button
+            <button
               disabled={isSubmitting}
               type="submit"
-              className="mt-6 bg-cyan-300"
-              fullWidth
-              variant="filled"
+              className="mt-6 btn w-full"
             >
               {isSubmitting ? "loading ..." : "sign up"}
-            </Button>
+            </button>
             <h2 color="gray" className="mt-4  text-center font-normal">
               Already have an account?{" "}
               <NavLink to={"/auth/login"} className="font-medium text-cyan-300">
@@ -132,14 +128,12 @@ const Register = () => {
               </NavLink>
             </h2>
           </form>
-          {Object.values(formFields)
-            .map((field) => field.registerValue)
-            .map((v, i) => (
-              <h2 key={i} className="text-red-400">
-                {errors?.[v]?.message}
-              </h2>
-            ))}
-        </Card>
+          {Object.values(formFields).map((field, i) => (
+            <h2 key={i} className="text-red-400">
+              {errors?.[formFields[i].registerValue]?.message}
+            </h2>
+          ))}
+        </div>
       </div>
     </div>
   );

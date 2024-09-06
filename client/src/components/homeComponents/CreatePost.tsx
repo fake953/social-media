@@ -1,9 +1,10 @@
-import alertFunction from "../../utils/alert";
 import { useAppSelector } from "../../services/state/hooks";
 import { getImageAddress } from "../../utils/getImageAddress";
-import { useDropzone, FileRejection } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useCreatePostMutation } from "../../services/api/apiQuery";
+import { useState } from "react";
+import swal from "sweetalert";
 
 import {
   AttachmentIcon,
@@ -15,12 +16,13 @@ import { postType } from "../../Types/postTypes";
 
 type FormFields = {
   description: string;
-  mediaAddress: FileRejection;
+  mediaAddress: string;
 };
 type Props = {
   updatePosts: (post: postType) => void;
 };
 const CreatePost = ({ updatePosts }: Props) => {
+  const [isDropzoneClosed, setIsDropzoneClosed] = useState<boolean>(true);
   const { user, token } = useAppSelector((state) => state.user);
   const [createPost] = useCreatePostMutation();
   const {
@@ -33,11 +35,11 @@ const CreatePost = ({ updatePosts }: Props) => {
     accept: {
       "image/jpeg": [".jpeg"],
       "image/png": [".png"],
+      "image/jpg": [".jpg"],
     },
     maxSize: 10 * 1024 * 1024,
   });
   if (!user || !token) {
-    alertFunction("create post");
     return;
   }
   const onSubmit: SubmitHandler<FormFields> = async (value) => {
@@ -45,19 +47,28 @@ const CreatePost = ({ updatePosts }: Props) => {
       alert("media is required");
       return;
     }
-    value.mediaAddress = acceptedFiles[0].path;
-    const postParameters = {
-      userId: user._id,
-      secret: token,
-      description: value.description,
-      picturePath: value.mediaAddress,
-    };
-    const res = await createPost(postParameters);
+    console.log(value, acceptedFiles[0]);
+
+    const formData = new FormData();
+    formData.append("picture", acceptedFiles[0]);
+    formData.append("picturePath", acceptedFiles[0].path);
+    formData.append("description", value.description);
+    formData.append("userId", user._id);
+    const res = await createPost({ formData, secret: token });
+
     updatePosts(res.data.data);
     console.log(res.data.data);
     reset();
+    setIsDropzoneClosed(true);
+    swal("success", "your post has created !");
   };
-  console.log(errors);
+  const controlDropzoneDisplay = () => {
+    if (isDropzoneClosed) {
+      setIsDropzoneClosed(false);
+    } else {
+      setIsDropzoneClosed(true);
+    }
+  };
 
   return (
     <div className="mb-4 rounded-lg bg-card p-4">
@@ -77,7 +88,7 @@ const CreatePost = ({ updatePosts }: Props) => {
           />
         </div>
         <div
-          // hidden={true}
+          hidden={isDropzoneClosed}
           {...getRootProps()}
           className=" border border-white pl-5 p-3 bg-input mt-3 cursor-pointer"
         >
@@ -97,19 +108,31 @@ const CreatePost = ({ updatePosts }: Props) => {
         {errors?.mediaAddress && <p>{errors.mediaAddress.message}</p>}
 
         <div className="flex justify-between mt-3 items-center">
-          <div className="flex gap-1 cursor-pointer hover:shadow-xl">
+          <div
+            className="flex gap-1 cursor-pointer hover:shadow-xl"
+            onClick={controlDropzoneDisplay}
+          >
             <ImageIcon />
             <span>Image</span>
           </div>
-          <div className="flex gap-1 cursor-pointer hover:shadow-xl">
+          <div
+            className="flex gap-1 cursor-pointer hover:shadow-xl"
+            onClick={controlDropzoneDisplay}
+          >
             <UploadIcon />
             <span>Clip</span>
           </div>
-          <div className="flex gap-1 cursor-pointer hover:shadow-xl">
+          <div
+            className="flex gap-1 cursor-pointer hover:shadow-xl"
+            onClick={controlDropzoneDisplay}
+          >
             <MicrophoneIcon />
             <span>Audio</span>
           </div>
-          <div className="flex gap-1 cursor-pointer hover:shadow-xl">
+          <div
+            className="flex gap-1 cursor-pointer hover:shadow-xl"
+            onClick={controlDropzoneDisplay}
+          >
             <AttachmentIcon />
             <span>Attachment</span>
           </div>
