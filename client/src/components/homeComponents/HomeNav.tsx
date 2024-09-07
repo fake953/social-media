@@ -1,19 +1,38 @@
-import { Navbar, Button } from "@material-tailwind/react";
-
 import { useNavigate } from "react-router-dom";
 
-import { SunIcon } from "../icons";
-import { useAppSelector } from "../../services/state/hooks";
+import { MoonIcon } from "../icons";
+import { SunIcon } from "@heroicons/react/16/solid";
+import { useAppDispatch, useAppSelector } from "../../services/state/hooks";
 import { getImageAddress } from "../../utils/getImageAddress";
+import { setMode } from "../../services/state/userSlice";
+import { setItemToLocalStorage } from "../../utils/localStorageSetter";
+import { IconSunFilled, IconMoonFilled } from "@tabler/icons-react";
 function HomeNav() {
-  const user = useAppSelector((state) => state.user.user);
+  const { user, mode } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   const navigate = useNavigate();
+  const controlThemeIcon = () => {
+    if (!mode || mode === "dark") {
+      return <IconSunFilled color="black" />;
+    } else {
+      return <IconMoonFilled />;
+    }
+  };
+  const addModeToLocalStorage = () => {
+    dispatch(setMode());
+    console.log(mode);
+
+    setItemToLocalStorage({ value: mode, itemName: "mode" });
+  };
   return (
-    <Navbar className=" border-none bg-card" fullWidth>
+    <nav className=" border-none h-16 bg-card px-5 lg:px-10 xl:px-20  pt-3.5 ">
       <div className="flex justify-between px-5 lg:px-10 xl:px-20">
         <div>
-          <h2 className="text-xl" onClick={() => navigate("/")}>
+          <h2
+            className="text-xl pt-1 text-copy-primary"
+            onClick={() => navigate("/")}
+          >
             Minipedia
           </h2>
         </div>
@@ -26,30 +45,30 @@ function HomeNav() {
             />
           ) : (
             <div>
-              <Button
+              <button
                 onClick={() => navigate("/auth/login")}
-                size="sm"
-                variant="gradient"
-                className="mr-5"
+                className="mr-5 btn px-5 py-2"
               >
                 log in
-              </Button>
-              <Button
+              </button>
+              <button
+                className="btn btn px-3 py-2"
                 onClick={() => navigate("/auth/register")}
-                size="sm"
-                variant="gradient"
               >
                 sign in
-              </Button>
+              </button>
             </div>
           )}
 
-          <div className="size-6 inline pl-6 pt-1">
-            <SunIcon />
+          <div
+            className="size-6 inline pl-6 pt-1 cursor-pointer text-copy-primary  rounded-full "
+            onClick={() => addModeToLocalStorage()}
+          >
+            {controlThemeIcon()}
           </div>
         </div>
       </div>
-    </Navbar>
+    </nav>
   );
 }
 

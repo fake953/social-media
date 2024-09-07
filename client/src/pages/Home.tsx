@@ -19,11 +19,6 @@ const Home = () => {
   const [posts, setPosts] = useState<postType[] | null>(null);
   const { data, isLoading } = useGetAllPostsQuery(null);
   const [getUserFriends] = useGetUserFriendsMutation();
-  // const userInformation = useGetUserInformationQuery({
-  //   id: user?._id,
-  //   secret: token,
-  // });
-
   useEffect(() => {
     if (!user || !token) return;
     const friendsData = async () => {
@@ -49,7 +44,7 @@ const Home = () => {
   return (
     <div className="bg-background">
       <HomeNav />
-      <div className="container	mx-auto w-full  grid grid-flow-col grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-8 mt-5 2xl:grid-cols-4">
+      <div className="container	mx-auto w-full  grid grid-flow-col grid-cols-1 md:grid-cols-2 xl:grid-cols-3 md:gap-8 mt-5 2xl:grid-cols-4 ">
         <div className=" text-center hidden md:block col-span-1 ">
           {user && token ? (
             <User data={user} parent="Home" />

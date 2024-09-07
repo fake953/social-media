@@ -1,4 +1,3 @@
-import { Button } from "@material-tailwind/react";
 import { LeftIcon } from "./icons";
 import { useNavigate } from "react-router-dom";
 
@@ -13,12 +12,7 @@ const Navbar = () => {
             Minipedia
           </h2>
           <div>
-            <button
-              onClick={() => navigate("/")}
-              // size="sm"
-              // variant="gradient"
-              className=" flex btn"
-            >
+            <button onClick={() => navigate("/")} className=" flex btn">
               <LeftIcon /> <span className="mt-0.5 text lg">Home</span>
             </button>
           </div>

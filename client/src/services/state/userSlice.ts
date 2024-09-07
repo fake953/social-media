@@ -17,16 +17,21 @@ export type userType = {
 interface state {
   user: userType | null;
   token: string | string;
+  mode: string;
 }
 
 const initialState: state = {
   user: null,
   token: "",
+  mode: "dark",
 };
 const userSlice = createSlice({
   name: "userSlice",
   initialState,
   reducers: {
+    setMode: (state) => {
+      state.mode = state.mode === "light" ? "dark" : "light";
+    },
     setLogin: (
       state,
       action: PayloadAction<{ user: userType; token: string }>
@@ -35,7 +40,7 @@ const userSlice = createSlice({
       state.token = action.payload.token;
     },
     setLogout: (state) => {
-      //   state.user = null;
+      state.user = null;
       state.token = "";
     },
     setUser: (state, action: PayloadAction<userType>) => {
@@ -51,7 +56,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { setLogin, setLogout, setUserFriends, setUser } =
+export const { setLogin, setLogout, setUserFriends, setUser, setMode } =
   userSlice.actions;
 
 export default userSlice.reducer;

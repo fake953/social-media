@@ -3,8 +3,8 @@ import Home from "./pages/Home";
 import { Login, Register } from "./pages/Auth";
 import Profile from "./pages/Profile";
 
-import { useAppDispatch } from "./services/state/hooks";
-import { setLogin } from "./services/state/userSlice";
+import { useAppDispatch, useAppSelector } from "./services/state/hooks";
+import { setLogin, setMode } from "./services/state/userSlice";
 import { getItemFromLocalStorage } from "./utils/localStorageSetter";
 import { useGetUserInformationMutation } from "./services/api/apiQuery";
 import { useEffect } from "react";
@@ -30,20 +30,24 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
+  // const [Theme, setTheme] = useState("dark");
   const dispatch = useAppDispatch();
+  const { mode } = useAppSelector((state) => state.user);
   const [getUserInformation] = useGetUserInformationMutation();
+  const Theme = getItemFromLocalStorage("mode");
   useEffect(() => {
+    dispatch(setMode());
+  }, [dispatch]);
+  useEffect(() => {
+    const token = getItemFromLocalStorage("token");
+    const user = JSON.parse(getItemFromLocalStorage("user")!);
     try {
-      const token = getItemFromLocalStorage("token");
-      const user = JSON.parse(getItemFromLocalStorage("user")!);
-
       if (token && user) {
         const setUser = async () => {
           const res = await getUserInformation({
             id: user._id,
             secret: token,
           });
-          console.log(res);
           dispatch(setLogin({ user: res.data.data, token }));
         };
         setUser();
@@ -54,10 +58,10 @@ const App = () => {
     } catch (error) {
       console.log(error);
     }
-  }, []);
+  }, [dispatch, getUserInformation]);
 
   return (
-    <div className=" h-full min-h-screen dark">
+    <div className={`h-full min-h-screen ${Theme || mode}`}>
       <RouterProvider router={router} />
     </div>
   );

@@ -97,7 +97,7 @@ const Posts = ({ data, isLoading, parent }: Props) => {
       ) : (
         <div className="no-scrollbar h-screen overflow-auto">
           {posts?.map((post: postType, i: number) => (
-            <div key={i} className="mb-8 bg-card rounded-lg p-5">
+            <div key={i} className="mb-8 bg-card rounded-lg p-5 shadow-lg">
               <header className="flex justify-between items-center  pb-3">
                 <div
                   onClick={() => navigate(`/profile/${post.userId}`)}
@@ -114,7 +114,7 @@ const Posts = ({ data, isLoading, parent }: Props) => {
                     <h1 className="text-md ">
                       {post.first_name} {""} {post.last_name}
                     </h1>
-                    <h6 className="text-sm text-start font-thin text-gray-400">
+                    <h6 className="text-sm text-start font-thin text-copy-primary">
                       {post.location}
                     </h6>
                   </div>
@@ -136,7 +136,7 @@ const Posts = ({ data, isLoading, parent }: Props) => {
               </header>
 
               <main>
-                <h1 className="text-sm text-start font-thin text-gray-200">
+                <h1 className="text-sm text-start font-thin text-copy-primary">
                   {post.description}
                 </h1>
                 <img
