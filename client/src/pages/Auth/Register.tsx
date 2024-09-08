@@ -22,6 +22,7 @@ const Register = () => {
     accept: {
       "image/jpeg": [".jpeg"],
       "image/png": [".png"],
+      "image/jpg": [".jpg"],
     },
     maxSize: 10 * 1024 * 1024,
   });
@@ -38,12 +39,21 @@ const Register = () => {
   const [registerUser] = useRegisterUserMutation();
 
   const onSubmit: SubmitHandler<formFields> = async (userInfo) => {
-    userInfo.picturePath = acceptedFiles[0].path!;
+    const formData = new FormData();
+    formData.append("picture", acceptedFiles[0]);
+    formData.append("picturePath", acceptedFiles[0].path);
+    formData.append("email", userInfo.email);
+    formData.append("last_name", userInfo.last_name);
+    formData.append("password", userInfo.password);
+    formData.append("first_name", userInfo.first_name);
+    formData.append("occupation", userInfo.occupation);
+    formData.append("location", userInfo.location);
 
     try {
       const {
         data: { data },
-      } = await registerUser(userInfo);
+      } = await registerUser(formData);
+
       const token = {
         value: data.token,
         itemName: "token",
@@ -63,11 +73,6 @@ const Register = () => {
       });
     }
   };
-  useEffect(() => {
-    const storedToken = getItemFromLocalStorage("token");
-
-    if (storedToken) navigate("/");
-  }, []);
 
   return (
     <div>

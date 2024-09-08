@@ -54,10 +54,13 @@ const CreatePost = ({ updatePosts }: Props) => {
     formData.append("picturePath", acceptedFiles[0].path);
     formData.append("description", value.description);
     formData.append("userId", user._id);
-    const res = await createPost({ formData, secret: token });
-
-    updatePosts(res.data.data);
-    console.log(res.data.data);
+    try {
+      const res = await createPost({ formData, secret: token });
+      updatePosts(res.data.data);
+      console.log(res.data.data);
+    } catch (error) {
+      console.log(error);
+    }
     reset();
     setIsDropzoneClosed(true);
     swal("success", "your post has created !");

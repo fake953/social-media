@@ -1,30 +1,12 @@
 import { useNavigate } from "react-router-dom";
 
-import { MoonIcon } from "../icons";
-import { SunIcon } from "@heroicons/react/16/solid";
-import { useAppDispatch, useAppSelector } from "../../services/state/hooks";
+import { useAppSelector } from "../../services/state/hooks";
 import { getImageAddress } from "../../utils/getImageAddress";
-import { setMode } from "../../services/state/userSlice";
-import { setItemToLocalStorage } from "../../utils/localStorageSetter";
-import { IconSunFilled, IconMoonFilled } from "@tabler/icons-react";
 function HomeNav() {
-  const { user, mode } = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
-  const controlThemeIcon = () => {
-    if (!mode || mode === "dark") {
-      return <IconSunFilled color="black" />;
-    } else {
-      return <IconMoonFilled />;
-    }
-  };
-  const addModeToLocalStorage = () => {
-    dispatch(setMode());
-    console.log(mode);
 
-    setItemToLocalStorage({ value: mode, itemName: "mode" });
-  };
   return (
     <nav className=" border-none h-16 bg-card px-5 lg:px-10 xl:px-20  pt-3.5 ">
       <div className="flex justify-between px-5 lg:px-10 xl:px-20">
@@ -59,13 +41,6 @@ function HomeNav() {
               </button>
             </div>
           )}
-
-          <div
-            className="size-6 inline pl-6 pt-1 cursor-pointer text-copy-primary  rounded-full "
-            onClick={() => addModeToLocalStorage()}
-          >
-            {controlThemeIcon()}
-          </div>
         </div>
       </div>
     </nav>

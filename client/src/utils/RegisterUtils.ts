@@ -20,6 +20,7 @@ export const schema = z.object({
     .string({ message: "location field should be a valid string" })
     .min(1, { message: "location is required" }),
   picturePath: z.any(),
+  picture: z.any(),
 });
 
 export type formFieldsType = {
