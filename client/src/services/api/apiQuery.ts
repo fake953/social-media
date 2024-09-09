@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const apiQuery = createApi({
   reducerPath: "apiQuery",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://social-media-sandy-five.vercel.app",
+    baseUrl: "https://social-media-sandy-five.vercel.app/",
   }),
   endpoints: (builder) => ({
     //AUTHENTICATION ENDPOINTS
