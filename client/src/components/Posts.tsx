@@ -89,12 +89,11 @@ const Posts = ({ data, isLoading, parent }: Props) => {
   useEffect(() => {
     setPosts(data);
   }, [data]);
-
   return (
     <section className="">
       {isLoading ? (
         <div className="grid h-full max-h-[300px] min-h-[160px] w-full  animate-pulse place-items-center rounded-lg bg-card"></div>
-      ) : (
+      ) : !posts?.length <= 0 ? (
         <div className="no-scrollbar h-screen overflow-auto">
           {posts?.map((post: postType, i: number) => (
             <div key={i} className="mb-8 bg-card rounded-lg p-5 shadow-lg">
@@ -196,6 +195,8 @@ const Posts = ({ data, isLoading, parent }: Props) => {
             </div>
           ))}
         </div>
+      ) : (
+        <h1 className="text-2xl text-center text-red-400">There is no post </h1>
       )}
     </section>
   );

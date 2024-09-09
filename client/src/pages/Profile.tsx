@@ -8,28 +8,29 @@ import Posts from "../components/Posts";
 import User from "../components/User";
 
 import { useEffect, useState } from "react";
-// import { useAppSelector } from "../services/state/hooks";
 import Friends from "../components/Friends";
 import Navbar from "../components/Navbar";
 
 const Profile = () => {
   const { id } = useParams<{ id: string }>();
-  // const { user, token } = useAppSelector((state) => state.user);
   const [friends, setFriends] = useState(null);
   const { data, isLoading } = useGetUserPostsQuery(id);
   const [getOtherUsersFriends] = useGetOtherUsersFriendsMutation();
   const userDetail = useGetOtherUsersDetailQuery({ id });
 
   useEffect(() => {
-    const friendsData = async () => {
-      const res = await getOtherUsersFriends({
-        id: id,
-      });
-      console.log(res);
+    try {
+      const friendsData = async () => {
+        const res = await getOtherUsersFriends({
+          id: id,
+        });
 
-      setFriends(res.data.data);
-    };
-    friendsData();
+        setFriends(res.data.data);
+      };
+      friendsData();
+    } catch (error) {
+      console.log(error);
+    }
   }, [id, getOtherUsersFriends]);
 
   return (

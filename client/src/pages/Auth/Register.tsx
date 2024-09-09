@@ -1,5 +1,4 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,10 +8,7 @@ import { useRegisterUserMutation } from "../../services/api/apiQuery";
 import { formFields, schema } from "../../utils/RegisterUtils";
 import { useAppDispatch } from "../../services/state/hooks";
 import { setLogin } from "../../services/state/userSlice";
-import {
-  getItemFromLocalStorage,
-  setItemToLocalStorage,
-} from "../../utils/localStorageSetter";
+import { setItemToLocalStorage } from "../../utils/localStorageSetter";
 import Navbar from "../../components/Navbar";
 const Register = () => {
   const navigate = useNavigate();
@@ -133,7 +129,7 @@ const Register = () => {
               </NavLink>
             </h2>
           </form>
-          {Object.values(formFields).map((field, i) => (
+          {Object.values(formFields).map((_, i) => (
             <h2 key={i} className="text-red-400">
               {errors?.[formFields[i].registerValue]?.message}
             </h2>
