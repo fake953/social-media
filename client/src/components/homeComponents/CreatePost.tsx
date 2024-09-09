@@ -145,7 +145,7 @@ const CreatePost = ({ updatePosts }: Props) => {
               type="submit"
               className="text-sm rounded-full py-2 px-4 bg-cyan-500 hover:bg-cyan-400"
             >
-              Post
+              {isSubmitting ? "Loading ..." : "post"}
             </button>
           </div>
         </div>
