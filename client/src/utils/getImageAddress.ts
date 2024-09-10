@@ -1,2 +1,2 @@
 export const getImageAddress = (imagePath: string) =>
-  `http://localhost:5000/assets/${imagePath}`;
+  `https://social-media-sandy-five.vercel.app/assets/${imagePath}`;
