@@ -11,7 +11,7 @@ const Ads = () => {
       </div>
       <div className="flex justify-between">
         <h1>Google Ads</h1>
-        <h6 className="text-md font-thin">https://ads.google.com</h6>
+        <h6 className="text-md font-thin">https://SponsoredCompany.com</h6>
       </div>
       <div>
         <h6 className="text-sm text-start font-thin text-gray-400">
