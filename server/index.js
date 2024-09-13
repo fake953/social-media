@@ -55,7 +55,7 @@ mongoose
   .connect(process.env.MONGO_ENV)
   .then(() => {
     app.listen(port, () => console.log(`listening on port :${port}`));
-    User.insertMany(users);
-    Post.insertMany(posts);
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((err) => console.log(`cannot connect to the mongodb : ${err}`));
